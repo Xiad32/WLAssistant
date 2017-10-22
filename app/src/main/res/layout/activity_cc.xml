@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bhge.wirelineassistant.CCActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/min_toolbar_height"
+        android:id="@+id/app_bar">
+
+        <com.bhge.wirelineassistant.GETextView
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:id="@+id/toolbar_title"
+            android:text="Wireline Assistant"
+            android:paddingLeft="40dp"
+            android:textColor="@color/colorPrimaryBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:textSize="@dimen/title_font_size"
+            android:paddingBottom="5dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
+            android:maxHeight="@dimen/min_toolbar_height"
+            android:src="@mipmap/bhge_lg_blu_rgb_sol" />
+
+        <LinearLayout
+            android:layout_height="3dp"
+            android:layout_width="match_parent"
+            android:background="@drawable/bhge_line"
+            android:layout_alignParentBottom="true" />
+
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/app_bar"
+        android:layout_width="368dp"
+        android:layout_height="495dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
+
+        <com.bhge.wirelineassistant.GETextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/CC_header"
+            android:id="@+id/selectionmodule"
+            android:textAlignment="center"
+            android:textSize="@dimen/title_font_size"
+            android:textColor="@color/colorPrimaryBlue">
+        </com.bhge.wirelineassistant.GETextView>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            android:id="@+id/selectionlistview"></ListView>
+
+        <Button
+            android:id="@+id/goButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Get Setup"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryBlue"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

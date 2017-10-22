@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#005eb8</color>
+    <color name="colorPrimaryBlue">#005eb8</color>
+    <color name="colorPrimaryDark">#63666a</color>
+    <color name="colorPrimaryDarkGray">#63666a</color>
+    <color name="colorPrimaryLightBlue">#00b5e2</color>
+    <color name="colorPrimaryLightGrey">#b1b3b3</color>
+    <color name="colorPrimaryWhite">#ffffff</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="bhgeLogoTopColor">#005CB8</color>
+    <color name="bhgeLogoBotColor">#10079F</color>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bhge.wirelineassistant.testActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/min_toolbar_height"
+        android:id="@+id/app_bar">
+        <!--
+        <android.support.v7.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/BHGE_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/min_toolbar_height"
+            android:background="@color/colorPrimaryWhite">
+        </android.support.v7.widget.Toolbar>
+        -->
+
+        <com.bhge.wirelineassistant.GETextView
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:id="@+id/toolbar_title"
+            android:text="Wireline Assistant"
+            android:paddingLeft="40dp"
+            android:textColor="@color/colorPrimaryBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:textSize="25dp"
+            android:paddingBottom="5dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
+            android:maxHeight="@dimen/min_toolbar_height"
+            android:src="@mipmap/bhge_lg_blu_rgb_sol" />
+
+        <LinearLayout
+            android:layout_height="3dp"
+            android:layout_width="match_parent"
+            android:background="@drawable/bhge_line"
+            android:layout_alignParentBottom="true" />
+
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/app_bar"
+        android:id="@+id/contentView"/>
+
+</RelativeLayout>

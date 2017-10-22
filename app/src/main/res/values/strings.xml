@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">WirelineAssistant</string>
+
+    <string name="BH">Baker Hughes</string>
+    <string name="BHFull">Baker Hughes, a GE Company</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="CC_header">Selection Module</string>
+</resources>
