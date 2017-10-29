@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_CC"
-            android:icon="@mipmap/cc_jpg"
+            android:icon="@mipmap/cc_trans_2_png"
             android:title="Chemical Cutter" />
         <item
             android:id="@+id/nav_MPC"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@mipmap/mpc_trans_png"
             android:title="Mechanical Pipe Cutter" />
         <item
             android:id="@+id/nav_BO"

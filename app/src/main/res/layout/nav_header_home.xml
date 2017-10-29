@@ -17,10 +17,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:layout_marginLeft="-93dp"
         app:srcCompat="@mipmap/bhge_lg_dkblu_rgb_grd" />
 
-
+    <!--android:layout_marginLeft="-93dp"-->
 
 
     <!--

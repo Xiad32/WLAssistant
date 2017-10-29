@@ -20,8 +20,12 @@
         </activity>
         <activity
             android:name=".CCActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".testActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".testActivity" />
+        <activity
+            android:name=".displaySetupActivity"
+            android:label="@string/title_activity_cc_display_setup"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

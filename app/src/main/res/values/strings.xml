@@ -9,5 +9,8 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="CC_header">Selection Module</string>
+    <string name="CC_header">Chemical Cutter</string>
+    <string name="title_activity_cc_display_setup">ccDisplaySetupActivity</string>
+    <string name="header_activity_cc_display_setup">Recommended Setup</string>
+
 </resources>
