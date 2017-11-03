@@ -23,8 +23,8 @@ import java.util.ArrayList;
 
 
 
-//TODO: Add font
-//TODO: Add logo
+//TODO Add font
+//TODO Add logo
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

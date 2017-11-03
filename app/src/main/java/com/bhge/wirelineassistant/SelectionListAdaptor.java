@@ -29,10 +29,10 @@ public class SelectionListAdaptor extends BaseAdapter{
     private ArrayList<SelectionNodeDetails> mSelectionNodes;
     private LayoutInflater mInflater;
     private Button mgoButton;
-    DataBaseHelper mccDatabaseHelper;
+    private CCDataBaseHelper mccDatabaseHelper;
 
     public SelectionListAdaptor(Context c, ArrayList<SelectionNodeDetails> selectionNodes, Button goButton,
-                                DataBaseHelper ccDatabaseHelper) {
+                                CCDataBaseHelper ccDatabaseHelper) {
         mContext = c;
         mSelectionNodes = selectionNodes;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

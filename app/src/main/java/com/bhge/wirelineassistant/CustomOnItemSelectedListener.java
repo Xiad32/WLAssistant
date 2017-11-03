@@ -17,9 +17,9 @@ public class CustomOnItemSelectedListener implements OnItemSelectedListener {
     private AdapterView<?> grandParent;
     private Button mgoButton;
     SelectionListAdaptor mSelectionListAdaptor;
-    DataBaseHelper mccDatabaseHelper;
+    CCDataBaseHelper mccDatabaseHelper;
 
-    public CustomOnItemSelectedListener(Button goButton, DataBaseHelper ccDatabaseHelper){
+    public CustomOnItemSelectedListener(Button goButton, CCDataBaseHelper ccDatabaseHelper){
         mgoButton = goButton;
         mccDatabaseHelper = ccDatabaseHelper;}
 

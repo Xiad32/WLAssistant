@@ -1,3 +1,9 @@
+//Assumptions:
+//  - All pipe size & weight entries are unique
+//  - All part nos start with a 'F'
+
+
+
 package com.bhge.wirelineassistant;
 
 import android.content.Intent;
@@ -16,7 +22,7 @@ import java.util.ArrayList;
 public class CCActivity extends AppCompatActivity {
 
 
-    private DataBaseHelper ccDBHelper;
+    private CCDataBaseHelper ccDBHelper;
     public ListView selectionListView;
     public static ArrayList<SelectionNodeDetails> selectionNodeDetails;// = new ArrayList<>();
     private SelectionListAdaptor mSelectionListAdaptor; // = new SelectionListAdaptor(this, selectionNodeDetails);
@@ -52,17 +58,17 @@ public class CCActivity extends AppCompatActivity {
 
 
         //Load Database:
-        ccDBHelper = new DataBaseHelper(this);
-        try {
-            ccDBHelper.createDataBase();
-        } catch (IOException ioe) {
-            throw new Error("Unable to create database");
-        }
-        try {
-            ccDBHelper.openDataBase();
-        }catch(SQLException sqle){
-            throw sqle;
-        }
+        ccDBHelper = new CCDataBaseHelper(this);
+//        try {
+//            ccDBHelper.createDataBase();
+//        } catch (IOException ioe) {
+//            throw new Error("Unable to create database");
+//        }
+//        try {
+//            ccDBHelper.openDataBase();
+//        }catch(SQLException sqle){
+//            throw sqle;
+//        }
 
         selectionNodeDetails = new ArrayList<>();
         mSelectionListAdaptor = new SelectionListAdaptor(this, selectionNodeDetails, goButton, ccDBHelper);
@@ -82,7 +88,7 @@ public class CCActivity extends AppCompatActivity {
     }
 
     public static void modifyListOnSelection(Button goButton, int entryModified, String lastSelection, SelectionListAdaptor mSelectionListAdaptor,
-                                             DataBaseHelper ccDBHelper)
+                                             CCDataBaseHelper ccDBHelper)
     {
         if (entryModified < mSelectionListAdaptor.getCount())
         {
@@ -102,7 +108,7 @@ public class CCActivity extends AppCompatActivity {
             goButton.setEnabled(false);
             if(!lastSelection.equals(BLANK_SELECTION)){
                 if (entryModified == 1)
-                    lastSelection = parseWeightFromSelection(lastSelection);
+                    lastSelection = ccDBHelper.getVarFromParsedRow("Weight", lastSelection);
                 CCActivity.selectionNodeDetails.get(entryModified).setSelectionEntry(lastSelection);
                 SelectionNodeDetails newNode = new SelectionNodeDetails();
                 newNode.setSelectionText(nodesTitleText[entryModified + 1]);
@@ -113,9 +119,10 @@ public class CCActivity extends AppCompatActivity {
                     case 1:
                         String size = CCActivity.selectionNodeDetails.get(0).getEntrySelection();
                         String weight = CCActivity.selectionNodeDetails.get(1).getEntrySelection();
-                        ArrayList<Integer> loadingTable = ccDBHelper.getLoadingTableForPipe(size, weight);
+                        ArrayList<String> loadingTable = ccDBHelper.getLoadingTableForPipe(size, weight);
                         newNode.setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(0)));
                         break;
+                    //TODO weight string is not Xicalculated properly. Check the function that extracts it
                 }
                 newNode.setSelectionList(false);
                 selectionNodeDetails.add(newNode);
@@ -123,15 +130,15 @@ public class CCActivity extends AppCompatActivity {
         }
     }
 
-    private static String parseWeightFromSelection(String s){
-        int start = 8; int end;
-        end = s.indexOf(" ID");
+//    private static String parseWeightFromSelection(String s){
+//        int start = 8; int end;
+//        end = s.indexOf(" ID");
+//
+//
+//        return s.substring(start, end);
+//    }
 
-
-        return s.substring(start, end);
-    }
-
-    private static ArrayList<Tuple> createResultsData(DataBaseHelper ccDBHelper)
+    private static ArrayList<Tuple> createResultsData(CCDataBaseHelper ccDBHelper)
     {
         ArrayList<Tuple> resultsToDislay = new ArrayList();
         String title, result = " ";
