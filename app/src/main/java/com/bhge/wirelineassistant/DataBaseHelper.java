@@ -213,11 +213,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         Cursor cursor = myDataBase.rawQuery(STRING_QUERY , conditions);
         String[] titles = cursor.getColumnNames();
-        String[] results = new String[(titles.length)*2];
+        String[] results = new String[(titles.length-1)*2];
         while (cursor.moveToNext()){
+            boolean skipped = false;
             for (int i = 0; i<titles.length; i++){
-                results[(i*2)+1] = titles[i];
-                results[i*2] = cursor.getString(i);
+                if (!titles[i].equals("_id") & !skipped){
+                    results[(i*2)+1] = titles[i];
+                    results[i*2] = cursor.getString(i);
+                }
+                else if (titles[i].equals("_id") & !skipped) {
+                    skipped = true;
+                }
+                else
+                {
+                    results[((i-1)*2)+1] = titles[i];
+                    results[(i-1)*2] = cursor.getString(i);
+                }
             }
         }
         cursor.close();
@@ -316,271 +327,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
-    // Add your public helper methods to access and get content from the database.
-    // You could return cursors by doing "return myDataBase.query(....)" so it'd be easy
-    // to you to create adapters for your views.
-
-//    public ArrayList<String> getPipeSizeList(){
-//        ArrayList <String> pipeSizes = new ArrayList<>();
-//        String PIPE_SIZE_QUERY = "SELECT DISTINCT size FROM Pipe_Data";
-//        //Cursor cursor = myDataBase.query(true, "Pipe_Data", null, null, null, null, null, null, null );
-//        Cursor cursor = myDataBase.rawQuery(PIPE_SIZE_QUERY, null);
-//        int sizeColIndex = cursor.getColumnIndex("size");
-//        String currentItem;
-//        pipeSizes.add(BLANK_SELECTION);
-//        while(cursor.moveToNext()) {
-//            currentItem = cursor.getString(sizeColIndex);
-//            Log.d("CCDB", "getPipeOD: " + currentItem);
-//            pipeSizes.add(currentItem);
-//        }
-//        cursor.close();
-//        return parseResults(pipeSizes);
-//    }
-
-//    public ArrayList<String> getPipeODsFromSize(String pipeSize)
-//    {
-//        ArrayList <String> pipeDetails = new ArrayList<>();
-//        Cursor cursor = myDataBase.query("Pipe_Data", null, "size = \"" + pipeSize + "\"", null, null, null, null, null );
-//        int weightColIndex = cursor.getColumnIndex("weight");
-//        int IDColIndex = cursor.getColumnIndex("ID");
-//        int driftColIndex = cursor.getColumnIndex("drift");
-//        String currentItemWeight;
-//        String currentItemID;
-//        String currentItemdrift;
-//        pipeDetails.add (BLANK_SELECTION);
-//        while(cursor.moveToNext()) {
-//            currentItemWeight = cursor.getString(weightColIndex);
-//            currentItemID = cursor.getString(IDColIndex);
-//            currentItemdrift = cursor.getString(driftColIndex);
-//            pipeDetails.add("Weight: " + currentItemWeight + " ID: " + currentItemID + " Drift: " + currentItemdrift);
-//        }
-//        cursor.close();
-//        return pipeDetails;
-//    }
-
-//    public ArrayList<String> getHydStatPresOptions(int LoadingTableName)
-//    {
-//        ArrayList <String> hydOptions = new ArrayList<>();
-//        String[] HydPres= {"HydPres"};
-//        Cursor cursor = myDataBase.query("LT_Pres_Loading", HydPres, "LTName = " + LoadingTableName,
-//                null, null, null, null, null );
-//        int hydPresColIndex = cursor.getColumnIndex(HydPres[0]);
-//        hydOptions.add(BLANK_SELECTION);
-//        String currentItem;
-//        while(cursor.moveToNext()) {
-//            currentItem = cursor.getString(hydPresColIndex);
-//            hydOptions.add(currentItem);
-//        }
-//        cursor.close();
-//        return hydOptions;
-//
-//    }
-
-//    public ArrayList<Integer> getLoadingTableForPipe(String pipeSize, String pipeWeight)
-//    {
-//        ArrayList <Integer> loadingTables = new ArrayList<>();
-//        String JOIN_QUERY = "SELECT DISTINCT Pipe_LT_Selection.LT FROM Pipe_LT_Selection INNER JOIN Pipe_Data ON Pipe_Data._id = Pipe_LT_Selection.Pid " +
-//                "Where Pipe_Data.size = ? AND Pipe_Data.weight = ?";
-//        String[] Args = {pipeSize, pipeWeight};
-//        Cursor cursor = myDataBase.rawQuery(JOIN_QUERY, Args);
-//        if (cursor.getCount() == 0) {
-//            loadingTables.add(-1);
-//            return loadingTables; //No Entries found in database
-//        }
-//        while(cursor.moveToNext()) {
-//            loadingTables.add(cursor.getInt(0));
-//        }
-//        cursor.close();
-//        return loadingTables;
-//    }
-//
-//    public int getPipeId(String pipeSize, String pipeWeight)
-//    {
-//        int pipeId = 0;
-//        String STRING_QUERY = "SELECT _id FROM Pipe_Data Where size = ? AND weight = ?";
-//        String[] Args =  {pipeSize, pipeWeight};
-//        Cursor cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            pipeId = cursor.getInt(0);
-//        }
-//        cursor.close();
-//        return pipeId;
-//    }
-//
-//    public void setInternalPipeId(String pipeSize, String pipeWeight)
-//    {
-//        mPipeID =  String.valueOf(getPipeId( pipeSize,  pipeWeight));
-//    }
-//
-//    public void setInternalLoadingTable(boolean CoiledTuing){
-//        CoiledTuing = true;
-//        ArrayList <Integer> loadingTables = new ArrayList<>();
-//        String JOIN_QUERY = "SELECT DISTINCT LT FROM Pipe_LT_Selection Where Pid = ?";
-//        String[] Args =  {String.valueOf(mPipeID)};
-//        Cursor cursor = myDataBase.rawQuery(JOIN_QUERY, Args);
-//        if (cursor.getCount() == 0) {
-//            loadingTables.add(-1);
-//            return; //No Entries found in database
-//        }
-//        while(cursor.moveToNext()) {
-//            loadingTables.add(cursor.getInt(0));
-//        }
-//        cursor.close();
-//        if (CoiledTuing)
-//            mLoadingTable = String.valueOf(loadingTables.get(0));
-//        else
-//            mLoadingTable = String.valueOf(loadingTables.get(1));
-//
-//    }
-//
-//
-//    public String getSlipSubDetails(){
-//        String result="";
-//        String STRING_QUERY = "SELECT SSid FROM Pipe_SS_Selection Where Pid = ?";
-//        String[] Args =  {String.valueOf(mPipeID)};
-//        Cursor cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = cursor.getString(0);
-//        }
-//        STRING_QUERY = "SELECT OD, PartNo FROM Slip_sub Where _id = ?";
-//        Args[0] =  result;
-//        cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = "OD: "+cursor.getString(0)+" PartNo: F"+cursor.getString(1);
-//        }
-//        cursor.close();
-//        return result;
-//    }
-//
-//    public String getCuttingHead(){
-//        String result="";
-//        String STRING_QUERY = "SELECT CHid FROM Pipe_CH_Selection Where Pid = ?";
-//        String[] Args =  {String.valueOf(mPipeID)};
-//        Cursor cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = cursor.getString(0);
-//        }
-//        STRING_QUERY = "SELECT OD, PartNo FROM cutting_head Where _id = ?";
-//        Args[0] =  result;
-//        cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = "OD: "+cursor.getString(0)+" PartNo: F"+cursor.getString(1);
-//        }
-//        cursor.close();
-//        return result;
-//    }
-//
-//
-//    public String getCyclinderDetails(){
-//        String result = "", cylinder="";
-//        String STRING_QUERY = "SELECT Cylid FROM LT_CYL_Match Where LTName = ?";
-//        String[] Args =  {String.valueOf(mLoadingTable)};
-//        Cursor cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            cylinder = cursor.getString(0);
-//        }
-//        STRING_QUERY = "SELECT * FROM Cylinders Where _id = ?";
-//        Args[0] =  cylinder;
-//        cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = "OD: " + cursor.getString(1) +
-//                    " Lenght: " + cursor.getString(2) +
-//                    " Part No: F" + cursor.getString(3);
-//        }
-//        cursor.close();
-//        return result;
-//    }
-//
-//    public void setInternalHydPres(String HydraulicPressure){
-//        mHydPress = HydraulicPressure;
-//    }
-//
-//    public String getTopProp()
-//    {
-//        String result = "";
-//        String STRING_QUERY = "SELECT TopPropSize, TopPropPartNo " +
-//                "FROM LT_Pres_Loading Where HydPres = ? AND LTName = ?";
-//        String[] Args =  {mHydPress, mLoadingTable};
-//        Cursor cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = "Size: " + cursor.getString(0) + " Part No: F" + cursor.getString(1);
-//        }
-//        cursor.close();
-//        return result;
-//    }
-//
-//    public String getBotProp()
-//    {
-//        String result = "";
-//        String STRING_QUERY = "SELECT BotPropSize, BotPropPartNo " +
-//                "FROM LT_Pres_Loading Where HydPres = ? AND LTName = ?";
-//        String[] Args =  {mHydPress, mLoadingTable};
-//        Cursor cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = "Size: " + cursor.getString(0) + " Part No: F" + cursor.getString(1);
-//        }
-//        cursor.close();
-//        return result;
-//    }
-//
-//
-//    public String getCatSizeNo()
-//    {
-//        String result = "";
-//        String STRING_QUERY = "SELECT CatSize, CatPartNo " +
-//                "FROM LT_Pres_Loading Where HydPres = ? AND LTName = ?";
-//        String[] Args =  {mHydPress, mLoadingTable};
-//        Cursor cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = "Size: " + cursor.getString(0) + " Part No: F" + cursor.getString(1);
-//        }
-//        cursor.close();
-//        return result;
-//    }
-//
-//    public String getChokeDiameter()
-//    {
-//        String result = "";
-//        String STRING_QUERY = "SELECT Choke " +
-//                "FROM LT_Pres_Loading Where HydPres = ? AND LTName = ?";
-//        String[] Args =  {mHydPress, mLoadingTable};
-//        Cursor cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = cursor.getString(0);
-//        }
-//        cursor.close();
-//        return result;
-//    }
-//
-//
-//
-//    public String getBurstDisc()
-//    {
-//        String result = "";
-//        String STRING_QUERY = "SELECT BurstDisc " +
-//                "FROM LT_Pres_Loading Where HydPres = ? AND LTName = ?";
-//        String[] Args =  {mHydPress, mLoadingTable};
-//        Cursor cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = cursor.getString(0);
-//        }
-//        cursor.close();
-//        return result;
-//    }
-//
-//    public String getIgnitionLengthAndSub()
-//    {
-//        String result = "";
-//        String STRING_QUERY = "SELECT IgnitionSize, IgnitionSubPartNo " +
-//                "FROM LT_Pres_Loading Where HydPres = ? AND LTName = ?";
-//        String[] Args =  {mHydPress, mLoadingTable};
-//        Cursor cursor = myDataBase.rawQuery(STRING_QUERY , Args);
-//        while (cursor.moveToNext()){
-//            result = "Length: " + cursor.getString(0) + " Part No: F" + cursor.getString(1);
-//        }
-//        cursor.close();
-//        return result;
-//    }
 
     private String[] parseResults (String[] results){
         for (String result : results){

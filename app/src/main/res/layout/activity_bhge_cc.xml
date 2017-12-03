@@ -11,16 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/min_toolbar_height"
         android:id="@+id/app_bar">
-        <!--
-        <android.support.v7.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/BHGE_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="@dimen/min_toolbar_height"
-            android:background="@color/colorPrimaryWhite">
-        </android.support.v7.widget.Toolbar>
-        -->
 
         <com.bhge.wirelineassistant.GETextView
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
@@ -55,9 +45,9 @@
     </RelativeLayout>
 
     <android.support.constraint.ConstraintLayout
-        layout="@layout/activity_cc"
         android:layout_below="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        layout="@layout/activity_cc"/>
 
 </RelativeLayout>

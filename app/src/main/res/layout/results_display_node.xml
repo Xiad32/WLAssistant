@@ -19,6 +19,6 @@
         android:text="Result"
         android:textSize="@dimen/regular_text_size"
         android:layout_gravity="right"
-        android:textColor="@color/colorPrimaryBlue"></com.bhge.wirelineassistant.GETextView>
+        android:textColor="@color/colorPrimaryDark"></com.bhge.wirelineassistant.GETextView>
 
 </LinearLayout>

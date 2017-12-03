@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Spinner;
+
 /**
  * Created by xicko on 10/13/17.
  */
@@ -14,6 +17,7 @@ public class CustomOnItemSelectedListener implements OnItemSelectedListener {
 
 
     private String selection;
+    private boolean checkBoxSelection;
     private AdapterView<?> grandParent;
     private Button mgoButton;
     SelectionListAdaptor mSelectionListAdaptor;
@@ -24,11 +28,19 @@ public class CustomOnItemSelectedListener implements OnItemSelectedListener {
         mccDatabaseHelper = ccDatabaseHelper;}
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        grandParent = (AdapterView) parent.getParent().getParent();
+        grandParent = (AdapterView) parent.getParent().getParent().getParent();
         mSelectionListAdaptor = (SelectionListAdaptor) grandParent.getAdapter();
-
-        selection = parent.getItemAtPosition(pos).toString();
-        CCActivity.modifyListOnSelection(mgoButton, grandParent.getPositionForView(view), selection, mSelectionListAdaptor, mccDatabaseHelper);
+        if (view instanceof Spinner) { //Change in Selection List
+            selection = parent.getItemAtPosition(pos).toString();
+            CCActivity.modifyListOnSelection(mgoButton, grandParent.getPositionForView(view), selection,
+                    mSelectionListAdaptor, mccDatabaseHelper);
+        }
+        else if (view instanceof CheckBox) //Change in option Status
+        {
+            checkBoxSelection = ((CheckBox) view).isChecked();
+            CCActivity.modifyListOnSelection(grandParent.getPositionForView(view),
+                    mSelectionListAdaptor, mccDatabaseHelper, checkBoxSelection); //special overload to change list options
+        }
     }
 
     @Override

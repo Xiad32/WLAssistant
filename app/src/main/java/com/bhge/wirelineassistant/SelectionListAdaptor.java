@@ -10,6 +10,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -62,6 +63,18 @@ public class SelectionListAdaptor extends BaseAdapter{
                 ArrayAdapter<String> (mContext, android.R.layout.simple_spinner_dropdown_item, currentNode.getSelectionList());
         selectionList.setAdapter(selectionListAdapter);
         selectionList.setOnItemSelectedListener(new CustomOnItemSelectedListener(mgoButton, mccDatabaseHelper));
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.optionSelection);
+        if(currentNode.getBoolOption() == SelectionNodeDetails.BOOL_NULL)
+            checkBox.setVisibility(View.INVISIBLE);
+        else {
+            checkBox.setVisibility(View.VISIBLE);
+            if(currentNode.getBoolOption() == SelectionNodeDetails.BOOL_YES)
+                checkBox.setActivated(true);
+            else
+                checkBox.setActivated(true);
+            checkBox.setText(currentNode.getBoolOptionText());
+        }
+        checkBox.setOnClickListener(new CCOnCheckBoxChangedListener(mgoButton, mccDatabaseHelper));
         return view;
         }
 }

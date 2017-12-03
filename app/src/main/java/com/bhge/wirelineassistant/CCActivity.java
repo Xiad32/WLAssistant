@@ -55,20 +55,8 @@ public class CCActivity extends AppCompatActivity {
             }
         });
 
-
-
         //Load Database:
         ccDBHelper = new CCDataBaseHelper(this);
-//        try {
-//            ccDBHelper.createDataBase();
-//        } catch (IOException ioe) {
-//            throw new Error("Unable to create database");
-//        }
-//        try {
-//            ccDBHelper.openDataBase();
-//        }catch(SQLException sqle){
-//            throw sqle;
-//        }
 
         selectionNodeDetails = new ArrayList<>();
         mSelectionListAdaptor = new SelectionListAdaptor(this, selectionNodeDetails, goButton, ccDBHelper);
@@ -120,9 +108,12 @@ public class CCActivity extends AppCompatActivity {
                         String size = CCActivity.selectionNodeDetails.get(0).getEntrySelection();
                         String weight = CCActivity.selectionNodeDetails.get(1).getEntrySelection();
                         ArrayList<String> loadingTable = ccDBHelper.getLoadingTableForPipe(size, weight);
+                        if (loadingTable.size() > 1) {
+                            newNode.setBoolOptionText("Coil Tubing?");
+                            newNode.setBoolOption(false);
+                        }
                         newNode.setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(0)));
                         break;
-                    //TODO weight string is not Xicalculated properly. Check the function that extracts it
                 }
                 newNode.setSelectionList(false);
                 selectionNodeDetails.add(newNode);
@@ -130,18 +121,21 @@ public class CCActivity extends AppCompatActivity {
         }
     }
 
-//    private static String parseWeightFromSelection(String s){
-//        int start = 8; int end;
-//        end = s.indexOf(" ID");
-//
-//
-//        return s.substring(start, end);
-//    }
+    public static void modifyListOnSelection(int entryModified, SelectionListAdaptor mSelectionListAdaptor,
+                                             CCDataBaseHelper ccDBHelper, Boolean checkBox)
+    {
+        String size = CCActivity.selectionNodeDetails.get(0).getEntrySelection();
+        String weight = CCActivity.selectionNodeDetails.get(1).getEntrySelection();
+        ArrayList<String> loadingTable = ccDBHelper.getLoadingTableForPipe(size, weight);
+        if (checkBox)
+            selectionNodeDetails.get(entryModified).setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(1)));
+        else
+            selectionNodeDetails.get(entryModified).setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(0)));
+    }
 
     private static ArrayList<Tuple> createResultsData(CCDataBaseHelper ccDBHelper)
     {
         ArrayList<Tuple> resultsToDislay = new ArrayList();
-        String title, result = " ";
         //Display Selection:
         for (int i = 0; i<ALL_SELECTION; i++)
             resultsToDislay.add(new Tuple (nodesTitleText[i], selectionNodeDetails.get(i).getEntrySelection()));
