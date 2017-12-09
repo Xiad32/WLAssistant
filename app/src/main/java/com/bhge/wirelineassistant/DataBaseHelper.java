@@ -22,18 +22,11 @@ import java.util.function.Consumer;
  */
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    //The Android's default system path of your application database.
     private static String DB_PATH;
-
     private static String DB_NAME;
-
     private SQLiteDatabase myDataBase;
-
     private final Context myContext;
-
-    private final String BLANK_SELECTION = "     ";
-
-    private String mPipeID = "" , mLoadingTable = "" , mHydPress = "";
+    private final int BYTE_BUFFER_SIZE = 1024;
 
     /**
      * Constructor=
@@ -51,26 +44,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * Creates a empty database on the system and rewrites it with your own database.
      * */
     public void createDataBase() throws IOException {
-
         boolean dbExist = checkDataBase();
-
         if(dbExist){
             //do nothing - database already exist
         }else{
-
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
             this.getReadableDatabase();
-
-            try {
-
-                copyDataBase();
-
-            } catch (IOException e) {
-
-                throw new Error("Error copying database");
-
-            }
+            try {copyDataBase();
+            } catch (IOException e) {throw new Error("Error copying database");}
         }
 
     }
@@ -82,22 +64,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private boolean checkDataBase(){
 
         SQLiteDatabase checkDB = null;
-
         try{
             String myPath = DB_PATH + DB_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-
-        }catch(SQLiteException e){
-
-            //database does't exist yet.
-
+        }catch(SQLiteException e){//database does't exist yet.
         }
 
-        if(checkDB != null){
-
-            checkDB.close();
-
-        }
+        if(checkDB != null){checkDB.close();}
 
         return checkDB != null ? true : false;
     }
@@ -108,18 +81,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * This is done by transfering bytestream.
      * */
     private void copyDataBase() throws IOException{
-
         //Open your local db as the input stream
         InputStream myInput = myContext.getAssets().open(DB_NAME);
 
         // Path to the just created empty db
         String outFileName = DB_PATH + DB_NAME;
-
         //Open the empty db as the output stream
         OutputStream myOutput = new FileOutputStream(outFileName);
 
         //transfer bytes from the inputfile to the outputfile
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[BYTE_BUFFER_SIZE];
         int length;
         while ((length = myInput.read(buffer))>0){
             myOutput.write(buffer, 0, length);
@@ -129,35 +100,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         myOutput.flush();
         myOutput.close();
         myInput.close();
-
     }
 
     public void openDataBase() throws SQLException {
-
         //Open the database
         String myPath = DB_PATH + DB_NAME;
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-
     }
 
     @Override
     public synchronized void close() {
-
         if(myDataBase != null)
             myDataBase.close();
-
         super.close();
-
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 
 
@@ -165,7 +128,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     {
         String[] itemsCut = items.split(",");
         int itemsCount = itemsCut.length;
-        String result[] = new String[itemsCount];
         String STRING_QUERY = "SELECT " + items +
                 " FROM " + table + " Where ";
         for (String var : variables){
@@ -173,9 +135,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         STRING_QUERY = STRING_QUERY.replaceAll("\\w\\w\\w\\s$", " ");
         Cursor cursor = myDataBase.rawQuery(STRING_QUERY , conditions);
+        String result[] = new String[itemsCount* cursor.getCount()];
+        Log.i("DBHelper", "getThis: size results buffer" + Integer.toString(itemsCount * cursor.getCount()) );
+        Log.i("DBHelper", "getThis: cursor Pos" + Integer.toString(cursor.getPosition()) );
         while (cursor.moveToNext()){
-            for (int i = 0; i<itemsCount; i++){
-                result[i] = cursor.getString(i); //TODO: review
+            Log.i("DBHelper", "getThis: cursor Pos" + Integer.toString(cursor.getPosition()) );
+            int upperBound = (cursor.getPosition()+1) * itemsCount;
+            for (int i = cursor.getPosition()*itemsCount; i< upperBound; i++){
+                int j = 0;Log.i("DBHelper", "getThis: i, position:" + Integer.toString(i) + " " + Integer.toString(cursor.getPosition()) );
+                Log.i("DBHelper", "getThis: upper limit:" + Integer.toString(upperBound) );
+                result[i] = cursor.getString(j);
+                j++;
             }
         }
         cursor.close();

@@ -7,23 +7,20 @@
 package com.bhge.wirelineassistant;
 
 import android.content.Intent;
-import android.database.SQLException;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class CCActivity extends AppCompatActivity {
 
 
     private CCDataBaseHelper ccDBHelper;
-    public ListView selectionListView;
+    public static ListView selectionListView;
     public static ArrayList<SelectionNodeDetails> selectionNodeDetails;// = new ArrayList<>();
     private SelectionListAdaptor mSelectionListAdaptor; // = new SelectionListAdaptor(this, selectionNodeDetails);
     private static final String[] nodesTitleText =
@@ -77,46 +74,48 @@ public class CCActivity extends AppCompatActivity {
 
     public static void modifyListOnSelection(Button goButton, int entryModified, String lastSelection, SelectionListAdaptor mSelectionListAdaptor,
                                              CCDataBaseHelper ccDBHelper)
-    {
-        if (entryModified < mSelectionListAdaptor.getCount())
-        {
-            //deflate and free higher entries:
-            for (int i = selectionNodeDetails.size()-1; i > entryModified; i--)
-                selectionNodeDetails.remove(i);
-        }
-        //add next nodes
-        if(mSelectionListAdaptor.getCount() == ALL_SELECTION && !lastSelection.equals(BLANK_SELECTION) )
-        {
-            goButton.setTextColor(CCActivity.enabledTextColor);
-            goButton.setEnabled(true);
-            CCActivity.selectionNodeDetails.get(entryModified).setSelectionEntry(lastSelection);
-        }
-        else {
-            goButton.setTextColor(CCActivity.disabledTextColor);
-            goButton.setEnabled(false);
-            if(!lastSelection.equals(BLANK_SELECTION)){
-                if (entryModified == 1)
-                    lastSelection = ccDBHelper.getVarFromParsedRow("Weight", lastSelection);
+    {   //TODO: problem with saving the selection for node 1 in a format different from the spinner text. Breaks on redrawing. Needs fixing
+        if(!lastSelection.equals(CCActivity.selectionNodeDetails.get(entryModified).getEntrySelection())) {
+            if (entryModified < mSelectionListAdaptor.getCount() && !lastSelection.equals(CCActivity.selectionNodeDetails.get(entryModified).getEntrySelection())) {
+                //deflate and free higher entries:
+                for (int i = selectionNodeDetails.size() - 1; i > entryModified; i--)
+                    selectionNodeDetails.remove(i);
+            }
+            //add next nodes
+            if (mSelectionListAdaptor.getCount() == ALL_SELECTION && !lastSelection.equals(BLANK_SELECTION)) {
+                goButton.setTextColor(CCActivity.enabledTextColor);
+                goButton.setEnabled(true);
                 CCActivity.selectionNodeDetails.get(entryModified).setSelectionEntry(lastSelection);
-                SelectionNodeDetails newNode = new SelectionNodeDetails();
-                newNode.setSelectionText(nodesTitleText[entryModified + 1]);
-                switch (entryModified) {
-                    case 0:
-                        newNode.setSelectionList(ccDBHelper.getPipeODsFromSize(lastSelection));
-                        break;
-                    case 1:
-                        String size = CCActivity.selectionNodeDetails.get(0).getEntrySelection();
-                        String weight = CCActivity.selectionNodeDetails.get(1).getEntrySelection();
-                        ArrayList<String> loadingTable = ccDBHelper.getLoadingTableForPipe(size, weight);
-                        if (loadingTable.size() > 1) {
-                            newNode.setBoolOptionText("Coil Tubing?");
-                            newNode.setBoolOption(false);
-                        }
-                        newNode.setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(0)));
-                        break;
+            } else {
+                goButton.setTextColor(CCActivity.disabledTextColor);
+                goButton.setEnabled(false);
+                if (!lastSelection.equals(BLANK_SELECTION)) {
+                    /*if (entryModified == 1)
+                        lastSelection = ccDBHelper.getVarFromParsedRow("Weight", lastSelection);
+                    */CCActivity.selectionNodeDetails.get(entryModified).setSelectionEntry(lastSelection);
+                    SelectionNodeDetails newNode = new SelectionNodeDetails();
+                    newNode.setSelectionText(nodesTitleText[entryModified + 1]);
+                    switch (entryModified) {
+                        case 0:
+                            newNode.setSelectionList(ccDBHelper.getPipeODsFromSize(lastSelection));
+                            break;
+                        case 1:
+                            String size = CCActivity.selectionNodeDetails.get(0).getEntrySelection();
+                            String weight = ccDBHelper.getVarFromParsedRow("Weight", CCActivity.selectionNodeDetails.get(1).getEntrySelection());
+                            ArrayList<String> loadingTable = ccDBHelper.getLoadingTableForPipe(size, weight);
+                            if (loadingTable.size() > 1) {
+                                newNode.setBoolOptionText("Coil Tubing?");
+                                newNode.setBoolOption(false);
+                            }
+                            newNode.setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(0)));
+                            break;
+                    }
+                    newNode.setSelectionList(false);
+                    selectionNodeDetails.add(newNode);
+                    mSelectionListAdaptor.notifyDataSetInvalidated();
+                    //selectionListView.invalidateViews();
+                    Log.d("CC_ADAPTOR_LIST", "modifyListOnSelection: Added new Node");
                 }
-                newNode.setSelectionList(false);
-                selectionNodeDetails.add(newNode);
             }
         }
     }
@@ -125,12 +124,18 @@ public class CCActivity extends AppCompatActivity {
                                              CCDataBaseHelper ccDBHelper, Boolean checkBox)
     {
         String size = CCActivity.selectionNodeDetails.get(0).getEntrySelection();
-        String weight = CCActivity.selectionNodeDetails.get(1).getEntrySelection();
+        String weight = ccDBHelper.getVarFromParsedRow("Weight", CCActivity.selectionNodeDetails.get(1).getEntrySelection());
         ArrayList<String> loadingTable = ccDBHelper.getLoadingTableForPipe(size, weight);
-        if (checkBox)
+        if (checkBox) {
             selectionNodeDetails.get(entryModified).setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(1)));
-        else
+            selectionNodeDetails.get(entryModified).setSelectionEntry(BLANK_SELECTION);
+        }
+        else {
             selectionNodeDetails.get(entryModified).setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(0)));
+            selectionNodeDetails.get(entryModified).setSelectionEntry(BLANK_SELECTION);
+        }
+        selectionNodeDetails.get(entryModified).setBoolOption(checkBox);
+        mSelectionListAdaptor.notifyDataSetInvalidated();
     }
 
     private static ArrayList<Tuple> createResultsData(CCDataBaseHelper ccDBHelper)
@@ -140,7 +145,7 @@ public class CCActivity extends AppCompatActivity {
         for (int i = 0; i<ALL_SELECTION; i++)
             resultsToDislay.add(new Tuple (nodesTitleText[i], selectionNodeDetails.get(i).getEntrySelection()));
         ccDBHelper.setInternalPipeId(selectionNodeDetails.get(0).getEntrySelection(),
-                selectionNodeDetails.get(1).getEntrySelection());
+                ccDBHelper.getVarFromParsedRow("Weight", selectionNodeDetails.get(1).getEntrySelection()) );
         for (int i= ALL_SELECTION; i< nodesTitleText.length; i++ )
             switch (i - ALL_SELECTION){
                 //getSlipSubDetails
@@ -153,7 +158,7 @@ public class CCActivity extends AppCompatActivity {
                     break;
                 //get Cyclinder Details
                 case 2:
-                    ccDBHelper.setInternalLoadingTable(false); //TODO: fix for CT support
+                    ccDBHelper.setInternalLoadingTable(selectionNodeDetails.get(1).getBoolOption() == SelectionNodeDetails.BOOL_YES); //TODO: fix for CT support
                     resultsToDislay.add(new Tuple (nodesTitleText[i], ccDBHelper.getCyclinderDetails()));
                     break;
                 //get TopPropellant
@@ -181,7 +186,6 @@ public class CCActivity extends AppCompatActivity {
                 case 8:
                     resultsToDislay.add(new Tuple (nodesTitleText[i], ccDBHelper.getIgnitionLengthAndSub()));
                     break;
-                //TODO: why is this called twice?
             }
         return resultsToDislay;
     }
