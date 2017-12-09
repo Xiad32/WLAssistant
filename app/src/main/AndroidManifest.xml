@@ -20,14 +20,15 @@
         </activity>
         <activity
             android:name=".CCActivity"
-            android:theme="@style/GE_Default"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/GE_Default" />
         <activity android:name=".testActivity" />
         <activity
             android:name=".displaySetupActivity"
             android:label="@string/title_activity_cc_display_setup"
-            android:theme="@style/GE_Default"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/GE_Default" />
+        <activity android:name=".MPCActivity"></activity>
     </application>
 
 </manifest>

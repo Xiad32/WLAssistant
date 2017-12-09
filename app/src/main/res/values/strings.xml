@@ -13,4 +13,8 @@
     <string name="title_activity_cc_display_setup">ccDisplaySetupActivity</string>
     <string name="header_activity_cc_display_setup">Recommended Setup</string>
 
+    <string name="MPC_header">Mechanical Pipe Cutter</string>
+    <string name="title_activity_mpc_display_setup">mpcDisplaySetupActivity</string>
+    <string name="header_activity_mpc_display_setup">Recommended Setup</string>
+
 </resources>

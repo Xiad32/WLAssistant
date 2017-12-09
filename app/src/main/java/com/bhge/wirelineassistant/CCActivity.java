@@ -47,7 +47,7 @@ public class CCActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ArrayList<Tuple> results = createResultsData(ccDBHelper);
                 Intent intent = new Intent (CCActivity.this, displaySetupActivity.class);
-                addResultsToIntent(intent, results);
+                commonLibraries.addResultsToIntent(intent, results);
                 startActivity(intent);
             }
         });
@@ -73,8 +73,9 @@ public class CCActivity extends AppCompatActivity {
     }
 
     public static void modifyListOnSelection(Button goButton, int entryModified, String lastSelection, SelectionListAdaptor mSelectionListAdaptor,
-                                             CCDataBaseHelper ccDBHelper)
-    {   //TODO: problem with saving the selection for node 1 in a format different from the spinner text. Breaks on redrawing. Needs fixing
+                                             Object ccDBHelper)
+    {
+        CCDataBaseHelper mCCDataBaseHelper = (CCDataBaseHelper) ccDBHelper;
         if(!lastSelection.equals(CCActivity.selectionNodeDetails.get(entryModified).getEntrySelection())) {
             if (entryModified < mSelectionListAdaptor.getCount() && !lastSelection.equals(CCActivity.selectionNodeDetails.get(entryModified).getEntrySelection())) {
                 //deflate and free higher entries:
@@ -97,23 +98,22 @@ public class CCActivity extends AppCompatActivity {
                     newNode.setSelectionText(nodesTitleText[entryModified + 1]);
                     switch (entryModified) {
                         case 0:
-                            newNode.setSelectionList(ccDBHelper.getPipeODsFromSize(lastSelection));
+                            newNode.setSelectionList(mCCDataBaseHelper.getPipeODsFromSize(lastSelection));
                             break;
                         case 1:
                             String size = CCActivity.selectionNodeDetails.get(0).getEntrySelection();
-                            String weight = ccDBHelper.getVarFromParsedRow("Weight", CCActivity.selectionNodeDetails.get(1).getEntrySelection());
-                            ArrayList<String> loadingTable = ccDBHelper.getLoadingTableForPipe(size, weight);
+                            String weight = mCCDataBaseHelper.getVarFromParsedRow("Weight", CCActivity.selectionNodeDetails.get(1).getEntrySelection());
+                            ArrayList<String> loadingTable = mCCDataBaseHelper.getLoadingTableForPipe(size, weight);
                             if (loadingTable.size() > 1) {
                                 newNode.setBoolOptionText("Coil Tubing?");
                                 newNode.setBoolOption(false);
                             }
-                            newNode.setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(0)));
+                            newNode.setSelectionList(mCCDataBaseHelper.getHydStatPresOptions(loadingTable.get(0)));
                             break;
                     }
                     newNode.setSelectionList(false);
                     selectionNodeDetails.add(newNode);
                     mSelectionListAdaptor.notifyDataSetInvalidated();
-                    //selectionListView.invalidateViews();
                     Log.d("CC_ADAPTOR_LIST", "modifyListOnSelection: Added new Node");
                 }
             }
@@ -121,19 +121,19 @@ public class CCActivity extends AppCompatActivity {
     }
 
     public static void modifyListOnSelection(int entryModified, SelectionListAdaptor mSelectionListAdaptor,
-                                             CCDataBaseHelper ccDBHelper, Boolean checkBox)
+                                             Object ccDBHelper, Boolean checkBox)
     {
+        CCDataBaseHelper mCCDataBaseHelper = (CCDataBaseHelper) ccDBHelper;
         String size = CCActivity.selectionNodeDetails.get(0).getEntrySelection();
-        String weight = ccDBHelper.getVarFromParsedRow("Weight", CCActivity.selectionNodeDetails.get(1).getEntrySelection());
-        ArrayList<String> loadingTable = ccDBHelper.getLoadingTableForPipe(size, weight);
+        String weight = mCCDataBaseHelper.getVarFromParsedRow("Weight", CCActivity.selectionNodeDetails.get(1).getEntrySelection());
+        ArrayList<String> loadingTable = mCCDataBaseHelper.getLoadingTableForPipe(size, weight);
         if (checkBox) {
-            selectionNodeDetails.get(entryModified).setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(1)));
-            selectionNodeDetails.get(entryModified).setSelectionEntry(BLANK_SELECTION);
+            selectionNodeDetails.get(entryModified).setSelectionList(mCCDataBaseHelper.getHydStatPresOptions(loadingTable.get(1)));
         }
         else {
-            selectionNodeDetails.get(entryModified).setSelectionList(ccDBHelper.getHydStatPresOptions(loadingTable.get(0)));
-            selectionNodeDetails.get(entryModified).setSelectionEntry(BLANK_SELECTION);
+            selectionNodeDetails.get(entryModified).setSelectionList(mCCDataBaseHelper.getHydStatPresOptions(loadingTable.get(0)));
         }
+        selectionNodeDetails.get(entryModified).setSelectionEntry(BLANK_SELECTION);
         selectionNodeDetails.get(entryModified).setBoolOption(checkBox);
         mSelectionListAdaptor.notifyDataSetInvalidated();
     }
@@ -190,14 +190,6 @@ public class CCActivity extends AppCompatActivity {
         return resultsToDislay;
     }
 
-    private void addResultsToIntent(Intent intent, ArrayList<Tuple> results){
-        String allValues = "";
-        for (int i = 0; i<results.size(); i++)
-        {
-            intent.putExtra(results.get(i).title, results.get(i).result);
-            allValues = allValues + results.get(i).title + "_";
-        }
-        intent.putExtra("allValues", allValues);
-    }
+
 
 }

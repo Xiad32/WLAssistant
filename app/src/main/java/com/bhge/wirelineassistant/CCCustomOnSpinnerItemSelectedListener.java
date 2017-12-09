@@ -19,9 +19,9 @@ public class CCCustomOnSpinnerItemSelectedListener implements OnItemSelectedList
     private View node;
     private Button mgoButton;
     SelectionListAdaptor mSelectionListAdaptor;
-    CCDataBaseHelper mccDatabaseHelper;
+    Object mccDatabaseHelper;
 
-    public CCCustomOnSpinnerItemSelectedListener(Button goButton, CCDataBaseHelper ccDatabaseHelper){
+    public CCCustomOnSpinnerItemSelectedListener(Button goButton, Object ccDatabaseHelper){
         mgoButton = goButton;
         mccDatabaseHelper = ccDatabaseHelper;}
 

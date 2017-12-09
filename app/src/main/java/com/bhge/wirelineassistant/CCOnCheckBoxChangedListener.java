@@ -17,9 +17,9 @@ class CCOnCheckBoxChangedListener implements android.view.View.OnClickListener {
     private Button mgoButton;
     private View node;
     SelectionListAdaptor mSelectionListAdaptor;
-    CCDataBaseHelper mccDatabaseHelper;
+    Object mccDatabaseHelper;
 
-    public CCOnCheckBoxChangedListener(Button goButton, CCDataBaseHelper ccDatabaseHelper){
+    public CCOnCheckBoxChangedListener(Button goButton, Object ccDatabaseHelper){
         mgoButton = goButton;
         mccDatabaseHelper = ccDatabaseHelper;}
 
