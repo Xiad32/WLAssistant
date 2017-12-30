@@ -10,7 +10,7 @@ import android.widget.CompoundButton;
  * Created by xicko on 12/3/17.
  */
 
-class CCOnCheckBoxChangedListener implements android.view.View.OnClickListener {
+class CustomOnCheckBoxChangedListener implements android.view.View.OnClickListener {
     private String selection;
     private boolean checkBoxSelection;
     private AdapterView<?> adapterView;
@@ -19,7 +19,7 @@ class CCOnCheckBoxChangedListener implements android.view.View.OnClickListener {
     SelectionListAdaptor mSelectionListAdaptor;
     Object mccDatabaseHelper;
 
-    public CCOnCheckBoxChangedListener(Button goButton, Object ccDatabaseHelper){
+    public CustomOnCheckBoxChangedListener(Button goButton, Object ccDatabaseHelper){
         mgoButton = goButton;
         mccDatabaseHelper = ccDatabaseHelper;}
 

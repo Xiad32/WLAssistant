@@ -40,7 +40,7 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Under Development", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -115,7 +115,7 @@ public class HomeActivity extends AppCompatActivity
             Intent ccActivity = new Intent(HomeActivity.this, CCActivity.class);
             HomeActivity.this.startActivity(ccActivity);
         } else if (id == R.id.nav_MPC) {
-            Intent testActivity = new Intent(HomeActivity.this, testActivity.class);
+            Intent testActivity = new Intent(HomeActivity.this, MPCActivity.class);
             HomeActivity.this.startActivity(testActivity);
 
         } else if (id == R.id.nav_BO) {

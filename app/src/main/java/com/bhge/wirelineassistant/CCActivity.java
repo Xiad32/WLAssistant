@@ -87,13 +87,12 @@ public class CCActivity extends AppCompatActivity {
                 goButton.setTextColor(CCActivity.enabledTextColor);
                 goButton.setEnabled(true);
                 CCActivity.selectionNodeDetails.get(entryModified).setSelectionEntry(lastSelection);
-            } else {
+            }
+            else {
                 goButton.setTextColor(CCActivity.disabledTextColor);
                 goButton.setEnabled(false);
                 if (!lastSelection.equals(BLANK_SELECTION)) {
-                    /*if (entryModified == 1)
-                        lastSelection = ccDBHelper.getVarFromParsedRow("Weight", lastSelection);
-                    */CCActivity.selectionNodeDetails.get(entryModified).setSelectionEntry(lastSelection);
+                    CCActivity.selectionNodeDetails.get(entryModified).setSelectionEntry(lastSelection);
                     SelectionNodeDetails newNode = new SelectionNodeDetails();
                     newNode.setSelectionText(nodesTitleText[entryModified + 1]);
                     switch (entryModified) {

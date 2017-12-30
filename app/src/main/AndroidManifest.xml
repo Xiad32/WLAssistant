@@ -22,13 +22,16 @@
             android:name=".CCActivity"
             android:screenOrientation="portrait"
             android:theme="@style/GE_Default" />
+        <activity
+            android:name=".MPCActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/GE_Default" />
         <activity android:name=".testActivity" />
         <activity
             android:name=".displaySetupActivity"
             android:label="@string/title_activity_cc_display_setup"
             android:screenOrientation="portrait"
             android:theme="@style/GE_Default" />
-        <activity android:name=".MPCActivity"></activity>
     </application>
 
 </manifest>

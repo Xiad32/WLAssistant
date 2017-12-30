@@ -26,12 +26,12 @@ public class SelectionListAdaptor extends BaseAdapter{
     private Object mccDatabaseHelper;
 
     public SelectionListAdaptor(Context c, ArrayList<SelectionNodeDetails> selectionNodes, Button goButton,
-                                Object ccDatabaseHelper) {
+                                Object databaseHelper) { //Object SpinnerListener
         mContext = c;
         mSelectionNodes = selectionNodes;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mgoButton = goButton;
-        mccDatabaseHelper = ccDatabaseHelper;
+        mccDatabaseHelper = databaseHelper;
     }
 
     public int getCount() {
@@ -47,7 +47,7 @@ public class SelectionListAdaptor extends BaseAdapter{
         }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        CCCustomOnSpinnerItemSelectedListener mCCCustomOnSpinnerItemSelectedListener = new CCCustomOnSpinnerItemSelectedListener(mgoButton, mccDatabaseHelper);
+        CustomOnSpinnerItemSelectedListener mCustomOnSpinnerItemSelectedListener = new CustomOnSpinnerItemSelectedListener(mgoButton, mccDatabaseHelper);
         View view = mInflater.inflate(R.layout.selection_node, null);
         TextView textSelection = (TextView) view.findViewById(R.id.selectionText);
         final SelectionNodeDetails currentNode = mSelectionNodes.get(position);
@@ -58,7 +58,7 @@ public class SelectionListAdaptor extends BaseAdapter{
         selectionList.setAdapter(selectionListAdapter);
         selectionList.setOnItemSelectedListener(null);
         selectionList.setSelection(currentNode.getSpinnerSelectionPos());
-        selectionList.setOnItemSelectedListener(mCCCustomOnSpinnerItemSelectedListener);
+        selectionList.setOnItemSelectedListener(mCustomOnSpinnerItemSelectedListener);
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.optionSelection);
         if(currentNode.getBoolOption() == SelectionNodeDetails.BOOL_NULL)
             checkBox.setVisibility(View.INVISIBLE);
@@ -69,7 +69,7 @@ public class SelectionListAdaptor extends BaseAdapter{
             else
                 checkBox.setChecked(false);
             checkBox.setText(currentNode.getBoolOptionText());
-            checkBox.setOnClickListener(new CCOnCheckBoxChangedListener(mgoButton, mccDatabaseHelper));
+            checkBox.setOnClickListener(new CustomOnCheckBoxChangedListener(mgoButton, mccDatabaseHelper));
         }
         return view;
         }
