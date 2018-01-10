@@ -17,4 +17,5 @@
     <string name="title_activity_mpc_display_setup">mpcDisplaySetupActivity</string>
     <string name="header_activity_mpc_display_setup">Recommended Setup</string>
 
+    <string name="defaultInsertionText">[Insert Value]</string>
 </resources>

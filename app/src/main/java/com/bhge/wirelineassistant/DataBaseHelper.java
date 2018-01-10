@@ -316,4 +316,23 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         int start = row.indexOf(" ", row.indexOf(var));
         return row.substring(start, row.indexOf(" ", start+1) );
     }
+
+    public String returnCheck(String[] queryReturn){
+        if(queryReturn.length >0)
+            return queryReturn[0];
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        String calling = stackTraceElements[stackTraceElements.length].getMethodName();
+        Log.d("DB Return Check, ", calling + "@ returnCheck: Expected single return, returned multiple.");
+        return "NULL";
+    }
+
+    public String returnCheck(String[] queryReturn, int position){
+        if(queryReturn.length > position)
+            return queryReturn[position];
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        String calling = stackTraceElements[stackTraceElements.length].getMethodName();
+        Log.d("DB Return Check, ", calling + "@ returnCheck: Expected single return, returned multiple.");
+        return "NULL";
+    }
+
 }

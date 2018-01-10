@@ -1,6 +1,8 @@
 package com.bhge.wirelineassistant;
 
 import android.content.Context;
+import android.opengl.Visibility;
+import android.support.design.widget.TextInputEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -52,24 +55,41 @@ public class SelectionListAdaptor extends BaseAdapter{
         TextView textSelection = (TextView) view.findViewById(R.id.selectionText);
         final SelectionNodeDetails currentNode = mSelectionNodes.get(position);
         textSelection.setText(currentNode.getSelectionText());
-        Spinner selectionList = view.findViewById(R.id.selectionList);
-        ArrayAdapter <String> selectionListAdapter = new
-                ArrayAdapter<String> (mContext, android.R.layout.simple_spinner_dropdown_item, currentNode.getSelectionList());
-        selectionList.setAdapter(selectionListAdapter);
-        selectionList.setOnItemSelectedListener(null);
-        selectionList.setSelection(currentNode.getSpinnerSelectionPos());
-        selectionList.setOnItemSelectedListener(mCustomOnSpinnerItemSelectedListener);
+        EditText mEditText = (EditText) view.findViewById(R.id.InsertionText);
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.optionSelection);
-        if(currentNode.getBoolOption() == SelectionNodeDetails.BOOL_NULL)
-            checkBox.setVisibility(View.INVISIBLE);
-        else {
-            checkBox.setVisibility(View.VISIBLE);
-            if(currentNode.getBoolOption() == SelectionNodeDetails.BOOL_YES)
-                checkBox.setChecked(true);
-            else
-                checkBox.setChecked(false);
-            checkBox.setText(currentNode.getBoolOptionText());
-            checkBox.setOnClickListener(new CustomOnCheckBoxChangedListener(mgoButton, mccDatabaseHelper));
+        Spinner selectionList = view.findViewById(R.id.selectionList);
+        if (currentNode.isSelectionAList()) {
+            //Set up checkbox and spinner
+
+            ArrayAdapter<String> selectionListAdapter = new
+                    ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_dropdown_item, currentNode.getSelectionList());
+            selectionList.setAdapter(selectionListAdapter);
+            selectionList.setOnItemSelectedListener(null);
+            selectionList.setSelection(currentNode.getSpinnerSelectionPos());
+            selectionList.setOnItemSelectedListener(mCustomOnSpinnerItemSelectedListener);
+
+            if (currentNode.getBoolOption() == SelectionNodeDetails.BOOL_NULL)
+                checkBox.setVisibility(View.INVISIBLE);
+            else {
+                checkBox.setVisibility(View.VISIBLE);
+                if (currentNode.getBoolOption() == SelectionNodeDetails.BOOL_YES)
+                    checkBox.setChecked(true);
+                else
+                    checkBox.setChecked(false);
+                checkBox.setText(currentNode.getBoolOptionText());
+                checkBox.setOnClickListener(new CustomOnCheckBoxChangedListener(mgoButton, mccDatabaseHelper));
+            }
+            //Hide Edit Text View:
+            mEditText.setVisibility(View.GONE);
+        }
+        else //selection is Text
+        {
+            //Set up Edit Text View:
+            //EditText mEditText = (EditText) view.findViewById(R.id.InsertionText);
+            mEditText.setText(currentNode.getInsertedText());
+            //Hide checkBox & Spinner:
+            selectionList.setVisibility(View.GONE);
+            checkBox.setVisibility(View.GONE);
         }
         return view;
         }

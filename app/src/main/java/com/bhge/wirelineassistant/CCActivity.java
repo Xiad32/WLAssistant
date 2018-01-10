@@ -63,7 +63,7 @@ public class CCActivity extends AppCompatActivity {
         SelectionNodeDetails thisItem = new SelectionNodeDetails();
         thisItem.setSelectionText(nodesTitleText[0]);
         thisItem.setSelectionList(ccDBHelper.getPipeSizeList());
-        thisItem.setSelectionList(true);
+        thisItem.setSelectionAsList(true);
         selectionNodeDetails.add(thisItem);
 
         selectionListView = (ListView) findViewById(R.id.selectionlistview);
@@ -110,7 +110,7 @@ public class CCActivity extends AppCompatActivity {
                             newNode.setSelectionList(mCCDataBaseHelper.getHydStatPresOptions(loadingTable.get(0)));
                             break;
                     }
-                    newNode.setSelectionList(false);
+                    newNode.setSelectionAsList(true);
                     selectionNodeDetails.add(newNode);
                     mSelectionListAdaptor.notifyDataSetInvalidated();
                     Log.d("CC_ADAPTOR_LIST", "modifyListOnSelection: Added new Node");

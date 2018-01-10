@@ -77,8 +77,8 @@ public class CCDataBaseHelper {
     public String getPipeId(String pipeSize, String pipeWeight)
     {
         int pipeId = 0;
-        return  ccDBHelper.getThis("_id", "Pipe_Data", new String[] {"Pipe_Size", "Weight"},
-                        new String[]  {pipeSize, pipeWeight})[0];
+        return  ccDBHelper.returnCheck(ccDBHelper.getThis("_id", "Pipe_Data", new String[] {"Pipe_Size", "Weight"},
+                        new String[]  {pipeSize, pipeWeight}));
     }
 
     public void setInternalPipeId(String pipeSize, String pipeWeight)
@@ -108,7 +108,8 @@ public class CCDataBaseHelper {
         result = ccDBHelper.getThis("SSid", "Pipe_SS_Selection", new String[]{"Pid"}, Args);
         Args[0] =  result[0];
         result =  ccDBHelper.getThis("OD, PartNo", "Slip_sub", new String[]{"_id"}, Args);
-        return "OD: "+result[0]+" PartBo: F"+result[1];
+        return "OD: "+ccDBHelper.returnCheck(result)+
+                " PartBo: F"+ccDBHelper.returnCheck(result, 1);
     }
 
     public String getCuttingHead(){
@@ -117,7 +118,8 @@ public class CCDataBaseHelper {
         result = ccDBHelper.getThis("CHid", "Pipe_CH_Selection", new String[]{"Pid"}, Args);
         Args[0] =  result[0];
         result = ccDBHelper.getThis("OD, PartNo", "cutting_head", new String[]{"_id"}, Args);
-        return "OD: "+result[0]+" PartNo: F"+result[1];
+        return "OD: "+ccDBHelper.returnCheck(result)+
+                " PartNo: F"+ccDBHelper.returnCheck(result, 1);
     }
 
 
@@ -129,7 +131,8 @@ public class CCDataBaseHelper {
         result = ccDBHelper.getAll("cutting_head", new String[]{"_id"}, Args);
         String combined = "";
         for (int i = 0; i<result.length/2; i++)
-            combined = combined + result[(i*2)+1] +": "+result[i*2]+ " ";
+            combined = combined + ccDBHelper.returnCheck(result, (i*2)+1) +
+                    ": "+ccDBHelper.returnCheck(result, i*2) + " ";
         return combined;
     }
 
@@ -143,7 +146,8 @@ public class CCDataBaseHelper {
         String[] Args =  {mHydPress, mLoadingTable};
         result = ccDBHelper.getThis("Top_Propellant_Size, Top_Propellant_PartNo", "Loading_Tables",
                 new String[]{"Hydrostatic_Pressure", "Loading_Table_ID"}, Args);
-        return "Size: "+result[0]+" PartNo: F"+result[1];
+        return "Size: "+ccDBHelper.returnCheck(result)
+                +" PartNo: F"+ccDBHelper.returnCheck(result, 1);
     }
 
     public String getBotProp()
@@ -152,7 +156,8 @@ public class CCDataBaseHelper {
         result = ccDBHelper.getThis("Bot_Propellant_Size, Bot_Propellant_PartNo", "Loading_Tables",
                 new String[] {"Hydrostatic_Pressure", "Loading_Table_ID"},
                 new String[] {mHydPress, mLoadingTable});
-        return "Size: "+result[0]+" PartNo: F"+result[1];
+        return "Size: "+ccDBHelper.returnCheck(result) +
+                " PartNo: F"+ccDBHelper.returnCheck(result, 1);
     }
 
 
@@ -161,7 +166,8 @@ public class CCDataBaseHelper {
         String result [];
         result = ccDBHelper.getThis("Catalyst_Size, Catalyst_PartNo", "Loading_Tables",
                 new String[] {"Hydrostatic_Pressure", "Loading_Table_ID"}, new String[] {mHydPress, mLoadingTable});
-        return "Size: "+result[0]+" PartNo: F"+result[1];
+        return "Size: "+ccDBHelper.returnCheck(result)+
+                " PartNo: F"+ccDBHelper.returnCheck(result, 1);
     }
 
     public String getChokeDiameter()
@@ -169,7 +175,7 @@ public class CCDataBaseHelper {
         String result [];
         result = ccDBHelper.getThis("Choke", "Loading_Tables",
                 new String[] {"Hydrostatic_Pressure", "Loading_Table_ID"}, new String[] {mHydPress, mLoadingTable});
-        return result[0];
+        return ccDBHelper.returnCheck(result);
     }
 
 
@@ -179,7 +185,7 @@ public class CCDataBaseHelper {
         String result [];
         result = ccDBHelper.getThis("Burst_Disc", "Loading_Tables",
                 new String[] {"Hydrostatic_Pressure", "Loading_Table_ID"}, new String[] {mHydPress, mLoadingTable});
-        return result[0];
+        return ccDBHelper.returnCheck(result);
     }
 
     public String getIgnitionLengthAndSub()

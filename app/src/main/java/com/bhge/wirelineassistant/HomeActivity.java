@@ -115,8 +115,8 @@ public class HomeActivity extends AppCompatActivity
             Intent ccActivity = new Intent(HomeActivity.this, CCActivity.class);
             HomeActivity.this.startActivity(ccActivity);
         } else if (id == R.id.nav_MPC) {
-            Intent testActivity = new Intent(HomeActivity.this, MPCActivity.class);
-            HomeActivity.this.startActivity(testActivity);
+            Intent MPCActivityIntent = new Intent(HomeActivity.this, MPCActivity.class);
+            HomeActivity.this.startActivity(MPCActivityIntent);
 
         } else if (id == R.id.nav_BO) {
 

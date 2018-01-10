@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 
 public class MPCActivity extends AppCompatActivity {
@@ -24,7 +24,7 @@ public class MPCActivity extends AppCompatActivity {
                     "Max Hardness HRC", "Min Yield Strength [psi]",
                     "Max Yield Strength [psi]", "Tensile Strength [psi]",
                     "Chrome Content [%]", "Motor Speed [rpm]", "Feed Rate [mm/min]",
-                    "Blade Size [mm]", "Blade Type", "Max Blade Cut Thickness [in]",
+                    "Blade Type", "Max Blade Cut Thickness [in]",
                     "Ideal Clamp Setup", "Top Clamp Part No", "Bot Clamp Part No",//"Second Choice Clamp",
                     "Ideal Cutting Head", "Max Tool OD in", "Max Pipe Cut", "Min Pipe ID in"};
                     //,"Third Choice Clamp", "First Choice Blade", "Second Choice Blade"};
@@ -62,7 +62,7 @@ public class MPCActivity extends AppCompatActivity {
         SelectionNodeDetails thisItem = new SelectionNodeDetails();
         thisItem.setSelectionText(nodesTitleText[0]);
         thisItem.setSelectionList(mMPCDBHelper.getPipeTypeList());
-        thisItem.setSelectionList(true);
+        thisItem.setSelectionAsList(true);
         selectionNodeDetails.add(thisItem);
 
         mMPCselectionListView= (ListView) findViewById(R.id.mpcSelectionListView);
@@ -103,31 +103,28 @@ public class MPCActivity extends AppCompatActivity {
                 case 7: //Recommended Feed Rate
                     resultsToDisplay.add(new Tuple(nodesTitleText[i], mMPCDBHelper.getFeedRate()));
                     break;
-                case 8: //Recommended Blade Size
-                    resultsToDisplay.add(new Tuple(nodesTitleText[i], mMPCDBHelper.getBladeSize()));
-                    break;
-                case 9: //Recommended Blade Type
+                case 8: //Recommended Blade Type
                     resultsToDisplay.add(new Tuple(nodesTitleText[i], mMPCDBHelper.getBladeType()));
                     break;
-                case 10: //Max blade cut thickness
+                case 9: //Max blade cut thickness
                     resultsToDisplay.add(new Tuple(nodesTitleText[i], mMPCDBHelper.getMaxCut()));
                     break;
-                case 11: //Recommended Clamp setup
+                case 10: //Recommended Clamp setup
                     resultsToDisplay.add(new Tuple(nodesTitleText[i], mMPCDBHelper.getClampSetup()));
                     break;
-                case 12: //Clamp Top Part No
+                case 11: //Clamp Top Part No
                     resultsToDisplay.add(new Tuple(nodesTitleText[i], mMPCDBHelper.getClampTopPartNo()));
                     break;
-                case 13: //Clamp Bot Part No
+                case 12: //Clamp Bot Part No
                     resultsToDisplay.add(new Tuple(nodesTitleText[i], mMPCDBHelper.getClampBotPartNo()));
                     break;
-                case 14: //Ideal cutting Head
+                case 13: //Ideal cutting Head
                     resultsToDisplay.add(new Tuple(nodesTitleText[i], mMPCDBHelper.getCuttingHeadSetup()));
                     break;
-                case 15: //Max Tool OD
+                case 14: //Max Tool OD
                     resultsToDisplay.add(new Tuple(nodesTitleText[i], mMPCDBHelper.getMaxToolOD()));
                     break;
-                case 16: //Max Blade Cut
+                case 15: //Max Blade Cut
                     resultsToDisplay.add(new Tuple(nodesTitleText[i], mMPCDBHelper.getMaxBladeCut()));
                     break;
             }
@@ -174,7 +171,7 @@ public class MPCActivity extends AppCompatActivity {
                             ));
                             break;
                     }
-                    newNode.setSelectionList(false);
+                    newNode.setSelectionAsList(true);
                     selectionNodeDetails.add(newNode);
                     mSelectionListAdaptor.notifyDataSetInvalidated();
                     Log.d("MPC_ADAPTOR_LIST", "modifyListOnSelection: Added new Node");
